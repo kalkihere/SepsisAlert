@@ -132,10 +132,10 @@ export async function getPatientScans(patientId: string): Promise<ScanResult[]> 
 
 export async function getUnsyncedScans(): Promise<ScanResult[]> {
   const store = await getStore('scans');
-  const index = store.index('synced');
   return new Promise((resolve, reject) => {
-    const request = index.getAll(false);
-    request.onsuccess = () => resolve(request.result);
+    const request = store.getAll();
+    request.onsuccess = () =>
+      resolve((request.result as ScanResult[]).filter((s) => !s.synced));
     request.onerror = () => reject(request.error);
   });
 }

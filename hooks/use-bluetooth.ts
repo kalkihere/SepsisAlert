@@ -118,7 +118,7 @@ export function useBluetooth(): UseBluetoothReturn {
           break;
       }
 
-      const device = await navigator.bluetooth.requestDevice({
+      const device = await navigator.bluetooth!.requestDevice({
         filters,
         optionalServices,
       });
@@ -191,7 +191,7 @@ export function useBluetooth(): UseBluetoothReturn {
     setIsScanning(true);
 
     try {
-      const device = await navigator.bluetooth.requestDevice({
+      const device = await navigator.bluetooth!.requestDevice({
         acceptAllDevices: true,
         optionalServices: [HEART_RATE_SERVICE, HEALTH_THERMOMETER_SERVICE, PULSE_OXIMETER_SERVICE],
       });
