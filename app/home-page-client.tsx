@@ -5,6 +5,7 @@ import { AppHeader } from '@/components/app-header';
 import { ScanHistoryItem, ScanHistoryItemSkeleton } from '@/components/scan-history-item';
 import { useTranslation } from '@/hooks/use-language';
 import { useOnlineStatus } from '@/hooks/use-online-status';
+import { usePWAInstall } from '@/hooks/use-pwa-install';
 import { initDB, getRecentScans, getPendingSyncCount, getAllPatients } from '@/lib/db';
 import { syncService } from '@/services/sync';
 import Link from 'next/link';
@@ -15,12 +16,14 @@ import {
   AlertTriangle,
   Clock,
   ChevronRight,
+  Download,
 } from 'lucide-react';
 import type { ScanResult, Patient } from '@/types';
 
 export function HomePageClient() {
   const { t } = useTranslation();
   const isOnline = useOnlineStatus();
+  const { isInstallable, isInstalled, installApp, canPrompt } = usePWAInstall();
   const [recentScans, setRecentScans] = useState<ScanResult[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [pendingSync, setPendingSync] = useState(0);
@@ -98,6 +101,24 @@ export function HomePageClient() {
             </button>
           </Link>
         </section>
+
+        {/* PWA Install Button */}
+        {!isInstalled && isInstallable && (
+          <button
+            onClick={canPrompt ? installApp : undefined}
+            className="w-full glass-panel glow-blue px-4 py-3.5 flex items-center gap-3 transition-all active:scale-[0.98]"
+            {...(!canPrompt ? { as: 'a', href: '/settings#install' } : {})}
+          >
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#30D158] to-[#0A84FF] flex items-center justify-center flex-shrink-0 shadow-lg">
+              <Download className="h-5 w-5 text-white" />
+            </div>
+            <div className="flex-1 text-left">
+              <p className="text-sm font-semibold text-white">Install SepsisAlert</p>
+              <p className="text-xs text-[#8E8E93]">Quick access &amp; offline screening</p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-[#8E8E93] flex-shrink-0" />
+          </button>
+        )}
 
         {/* Stats Cards - Three metric cards */}
         <section className="grid grid-cols-3 gap-3">
