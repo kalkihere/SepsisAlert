@@ -1,0 +1,378 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Dark Medical-Tech Theme - Apple-inspired aesthetics */
+:root {
+  /* Primary backgrounds - deep charcoal */
+  --background: #0A0E12;
+  --foreground: #FFFFFF;
+  
+  /* Cards with glassmorphism - midnight blue tint */
+  --card: #141B24;
+  --card-foreground: #FFFFFF;
+  --popover: #141B24;
+  --popover-foreground: #FFFFFF;
+  
+  /* Primary - System Blue (Apple-style) */
+  --primary: #0A84FF;
+  --primary-foreground: #FFFFFF;
+  
+  /* Secondary - Neutral gray surface */
+  --secondary: #1C242E;
+  --secondary-foreground: #FFFFFF;
+  
+  --muted: #1C242E;
+  --muted-foreground: #8E8E93;
+  
+  --accent: #0A84FF;
+  --accent-foreground: #FFFFFF;
+  
+  /* Destructive - System Red */
+  --destructive: #FF453A;
+  --destructive-foreground: #FFFFFF;
+  
+  --border: #2C3440;
+  --input: #1C242E;
+  --ring: #0A84FF;
+  
+  /* Risk level colors - System colors */
+  --risk-red: #FF453A;
+  --risk-red-bg: rgba(255, 69, 58, 0.2);
+  --risk-amber: #FFD60A;
+  --risk-amber-bg: rgba(255, 214, 10, 0.2);
+  --risk-green: #30D158;
+  --risk-green-bg: rgba(48, 209, 88, 0.2);
+  
+  /* Chart colors for vitals */
+  --chart-1: #FF453A;
+  --chart-2: #0A84FF;
+  --chart-3: #FFD60A;
+  --chart-4: #30D158;
+  --chart-5: #BF5AF2;
+  
+  /* Glow colors - subtle neon */
+  --glow-green: rgba(48, 209, 88, 0.4);
+  --glow-green-strong: rgba(48, 209, 88, 0.6);
+  --glow-blue: rgba(10, 132, 255, 0.4);
+  --glow-blue-strong: rgba(10, 132, 255, 0.6);
+  --glow-red: rgba(255, 69, 58, 0.4);
+  --glow-amber: rgba(255, 214, 10, 0.4);
+  
+  /* Large border radius for Apple aesthetic */
+  --radius: 1.25rem;
+  --radius-card: 1.5rem;
+  
+  --sidebar: #0A0E12;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #0A84FF;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #1C242E;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #2C3440;
+  --sidebar-ring: #0A84FF;
+}
+
+/* Light mode override if needed */
+.light {
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+  --primary: #00C853;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F172A;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --accent: #0EA5E9;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #E2E8F0;
+  --input: #F1F5F9;
+  --ring: #00C853;
+}
+
+@theme inline {
+  --font-sans: var(--font-space-grotesk), 'Space Grotesk', var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
+  
+  /* Custom glow colors for Tailwind */
+  --color-glow-green: var(--glow-green);
+  --color-glow-green-strong: var(--glow-green-strong);
+  --color-glow-blue: var(--glow-blue);
+  --color-glow-red: var(--glow-red);
+  --color-glow-amber: var(--glow-amber);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Medical-tech animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 20px var(--glow-green);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 30px var(--glow-green-strong);
+  }
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.1);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+@keyframes heartbeat-line {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes online-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.animate-online-pulse {
+  animation: online-pulse 2s ease-in-out infinite;
+}
+
+/* Glassmorphism panel utility - Apple-inspired */
+.glass-panel {
+  background: rgba(20, 27, 36, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-card);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.05),
+    0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Inner glow effect for cards */
+.glass-panel-glow-blue {
+  background: linear-gradient(180deg, rgba(10, 132, 255, 0.12) 0%, rgba(20, 27, 36, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(10, 132, 255, 0.2);
+  border-radius: var(--radius-card);
+  box-shadow: 
+    inset 0 1px 1px rgba(10, 132, 255, 0.15),
+    inset 0 0 40px rgba(10, 132, 255, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.glass-panel-glow-red {
+  background: linear-gradient(180deg, rgba(255, 69, 58, 0.12) 0%, rgba(20, 27, 36, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 69, 58, 0.2);
+  border-radius: var(--radius-card);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 69, 58, 0.15),
+    inset 0 0 40px rgba(255, 69, 58, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.glass-panel-glow-amber {
+  background: linear-gradient(180deg, rgba(255, 214, 10, 0.12) 0%, rgba(20, 27, 36, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 214, 10, 0.2);
+  border-radius: var(--radius-card);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 214, 10, 0.15),
+    inset 0 0 40px rgba(255, 214, 10, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Primary action button - Deep blue */
+.action-button-primary {
+  background: linear-gradient(180deg, #1A5DC8 0%, #0A4AA0 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-card);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    0 4px 24px rgba(10, 132, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.action-button-primary:hover {
+  background: linear-gradient(180deg, #2068D6 0%, #0C52AD 100%);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    0 8px 32px rgba(10, 132, 255, 0.4);
+}
+
+.action-button-primary:active {
+  transform: scale(0.98);
+}
+
+/* Secondary action button - Gray */
+.action-button-secondary {
+  background: linear-gradient(180deg, #3A424D 0%, #2C343E 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-card);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.action-button-secondary:hover {
+  background: linear-gradient(180deg, #454D58 0%, #363E48 100%);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.12),
+    0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.action-button-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Glow card hover effect */
+.glow-card {
+  transition: all 0.2s ease;
+}
+
+.glow-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Risk glow variants */
+.glow-red {
+  box-shadow: 0 0 20px var(--glow-red), 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.glow-amber {
+  box-shadow: 0 0 20px var(--glow-amber), 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px var(--glow-green), 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px var(--glow-blue), 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Neon icon glow effects */
+.icon-glow-blue {
+  filter: drop-shadow(0 0 8px rgba(10, 132, 255, 0.8));
+}
+
+.icon-glow-red {
+  filter: drop-shadow(0 0 8px rgba(255, 69, 58, 0.8));
+}
+
+.icon-glow-amber {
+  filter: drop-shadow(0 0 8px rgba(255, 214, 10, 0.8));
+}
+
+.icon-glow-green {
+  filter: drop-shadow(0 0 8px rgba(48, 209, 88, 0.8));
+}
+
+/* Gradient button - primary CTA */
+.gradient-button {
+  background: linear-gradient(135deg, #30D158 0%, #0A84FF 100%);
+  color: #0B0F14;
+  font-weight: 600;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(48, 209, 88, 0.3);
+}
+
+.gradient-button:hover {
+  box-shadow: 0 6px 28px rgba(48, 209, 88, 0.45);
+  filter: brightness(1.08);
+}
+
+.gradient-button:active {
+  transform: scale(0.98);
+}
+
+/* Safe bottom padding for iOS notch/home indicator */
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
