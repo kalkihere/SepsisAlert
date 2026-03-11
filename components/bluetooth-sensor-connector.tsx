@@ -357,19 +357,6 @@ export function BluetoothSensorConnector({ onVitalsUpdate, className }: Bluetoot
             </div>
           </div>
         )}
-
-        {/* Simulate button (always available for testing/demo) */}
-        <div className="pt-1">
-          <Button
-            variant="secondary"
-            className="w-full bg-[var(--secondary)] hover:bg-[var(--accent)]/20 border border-[var(--border)] hover:border-[var(--accent)]"
-            onClick={simulateReading}
-            disabled={isMeasuring}
-          >
-            <RefreshCw className="h-4 w-4 mr-2" />
-            {t('simulateSensors')} (Demo)
-          </Button>
-        </div>
       </div>
     </div>
   );
