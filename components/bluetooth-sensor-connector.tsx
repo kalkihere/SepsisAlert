@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useBluetooth } from '@/hooks/use-bluetooth';
 import { useTranslation } from '@/hooks/use-language';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { 
   Bluetooth, 
   BluetoothConnected, 
@@ -20,6 +20,8 @@ import {
   AlertCircle,
   CheckCircle2,
   Fingerprint,
+  MessageSquare,
+  Send,
 } from 'lucide-react';
 
 interface BluetoothSensorConnectorProps {
@@ -45,7 +47,10 @@ export function BluetoothSensorConnector({ onVitalsUpdate, className }: Bluetoot
     startMeasurement,
     stopMeasurement,
     simulateReading,
+    sendTestMessage,
   } = useBluetooth();
+
+  const [testMessage, setTestMessage] = useState('');
 
   // Notify parent of vital updates
   useEffect(() => {
@@ -141,7 +146,26 @@ export function BluetoothSensorConnector({ onVitalsUpdate, className }: Bluetoot
         </div>
       </div>
 
-      <div className="p-4 space-y-4">
+      <div className="p-4 space-y-4 relative">
+        {/* Scanning Animation Overlay */}
+        {isScanning && (
+          <div className="absolute inset-0 z-10 bg-[#0B0F14]/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 rounded-b-xl border border-[var(--accent)]/20 shadow-[0_0_20px_var(--accent)_inset]">
+            <div className="relative flex items-center justify-center h-20 w-20 mb-4">
+              {/* Pulsing rings */}
+              <div className="absolute inset-0 rounded-full border border-[var(--accent)] opacity-20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" />
+              <div className="absolute inset-0 rounded-full border border-[var(--primary)] opacity-40 animate-[ping_2.5s_cubic-bezier(0,0,0.2,1)_infinite]" style={{ animationDelay: '0.5s' }} />
+              
+              <div className="h-12 w-12 bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] rounded-full flex items-center justify-center z-10 animate-pulse">
+                <Bluetooth className="h-6 w-6 text-[#0B0F14]" />
+              </div>
+            </div>
+            <h3 className="text-lg font-semibold text-foreground mb-1">Scanning for ESP32...</h3>
+            <p className="text-sm text-muted-foreground text-center">
+              Please ensure your device is powered on.<br/>Select <strong>"ESP32_CHAT"</strong> from the popup window.
+            </p>
+          </div>
+        )}
+
         {/* Connection Button (when not connected) */}
         {!isConnected && (
           <Button
@@ -289,6 +313,48 @@ export function BluetoothSensorConnector({ onVitalsUpdate, className }: Bluetoot
             </div>
             <span className="font-medium text-foreground">{deviceName}</span>
             <span className="text-muted-foreground text-xs">• BLE Connected</span>
+          </div>
+        )}
+
+        {/* Test Chat Box (Only when connected) */}
+        {isConnected && (
+          <div className="border border-[#1F2A36] rounded-xl overflow-hidden mt-6 bg-[#0B0F14]/50">
+            <div className="bg-[#1F2A36]/50 px-3 py-2 border-b border-[#1F2A36] flex items-center gap-2">
+              <MessageSquare className="h-4 w-4 text-[var(--accent)]" />
+              <h4 className="text-sm font-medium">Test Communication</h4>
+            </div>
+            <div className="p-3">
+              <p className="text-xs text-muted-foreground mb-2">
+                Type here to send a raw message to your ESP32 Serial Monitor:
+              </p>
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={testMessage}
+                  onChange={(e) => setTestMessage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && testMessage.trim()) {
+                      sendTestMessage(testMessage.trim());
+                      setTestMessage('');
+                    }
+                  }}
+                  placeholder="e.g. hi" 
+                  className="flex-1 bg-[#1A232E] border border-[#2A3746] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[var(--primary)] transition-colors"
+                />
+                <Button 
+                  size="sm"
+                  onClick={() => {
+                    if (testMessage.trim()) {
+                      sendTestMessage(testMessage.trim());
+                      setTestMessage('');
+                    }
+                  }}
+                  className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-[#0B0F14]"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
         )}
 

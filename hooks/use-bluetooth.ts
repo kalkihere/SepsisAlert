@@ -44,6 +44,7 @@ export interface UseBluetoothReturn {
   startMeasurement: (type?: MeasurementCommand) => Promise<void>;
   stopMeasurement: () => Promise<void>;
   simulateReading: () => void;
+  sendTestMessage: (message: string) => Promise<void>;
 }
 
 // Human-readable status messages
@@ -441,6 +442,24 @@ export function useBluetooth(): UseBluetoothReturn {
     setTimeout(() => clearInterval(interval), 5000);
   }, []);
 
+  // Send arbitrary string message (for testing/chat)
+  const sendTestMessage = useCallback(async (message: string) => {
+    if (!characteristicRef.current || !isConnected) {
+      setError('Not connected to ESP32');
+      return;
+    }
+
+    try {
+      const encoder = new TextEncoder();
+      await characteristicRef.current.writeValue(encoder.encode(message));
+      console.log('[BLE] Sent test message:', message);
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : 'Failed to send message';
+      setError(errMsg);
+      console.error('[BLE] Error sending test message:', err);
+    }
+  }, [isConnected]);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -464,5 +483,6 @@ export function useBluetooth(): UseBluetoothReturn {
     startMeasurement,
     stopMeasurement,
     simulateReading,
+    sendTestMessage,
   };
 }
