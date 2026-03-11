@@ -78,8 +78,10 @@ class MyServerCallbacks: public BLEServerCallbacks {
     deviceConnected = false;
     Serial.println("Phone disconnected");
 
-    // Restart advertising so phone can reconnect
+    // Add a small delay then restart advertising so phone can reconnect
+    delay(500); 
     BLEDevice::startAdvertising();
+    Serial.println("Advertising restarted... ready for new connection.");
   }
 };
 
@@ -113,9 +115,18 @@ class MyCallbacks: public BLECharacteristicCallbacks {
         beatAvg = 0;
         beatsPerMinute = 0;
 
-        do{
+        // Give it 15 seconds to find a finger
+        unsigned long searchStart = millis();
+        bool success = false;
+        
+        do {
           flag = Pulse_spO2();
-        }while(flag);
+          // Added: break out if it's been searching for more than 15 seconds
+          if (millis() - searchStart > 15000) {
+            Serial.println("Measurement timeout (no finger detected).");
+            break;
+          }
+        } while(flag);
 
 
         String reply = "BPM: " + String(beatsPerMinute) + "BPM AVG: " + String(beatAvg) + "SP02 " + String(SpO2);
@@ -283,8 +294,8 @@ int Pulse_spO2()
    { 
     Serial.println("Finger not detected. Please place your finger on the sensor.");
     flag2=0;
-   
-    return 1; //Error
+    delay(500); // Add a small delay so it doesn't flood the serial monitor
+    return 1; // Return 1 to try again
   } 
 
   return 1; //Error
